@@ -1,17 +1,16 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Hero Book"/>
+    <el-menu router :default-active="$route.path" mode="horizontal" class="app-nav">
+      <el-menu-item index="/stories">英雄事迹</el-menu-item>
+    </el-menu>
+
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld,
-  },
 };
 </script>
 
