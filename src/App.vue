@@ -1,26 +1,35 @@
 <template>
   <div id="app">
-    <el-menu router :default-active="$route.path" mode="horizontal" class="app-nav">
-      <el-menu-item index="/stories">英雄事迹</el-menu-item>
-    </el-menu>
-
-    <router-view></router-view>
+    <AppHeader id="app-header"></AppHeader>
+    <main>
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
 <script>
+import AppHeader from './components/AppHeader';
+
 export default {
   name: 'App',
+  components: {
+    AppHeader,
+  },
 };
 </script>
 
-<style>
+<style lang="scss">
+  @import "common/styles/variables";
+
   #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
+
+  main {
+    margin-top: $header-height;
+  }
 </style>
