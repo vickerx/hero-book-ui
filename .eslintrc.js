@@ -9,8 +9,19 @@ module.exports = {
   parserOptions: {
     parser: "babel-eslint"
   },
+  settings: {
+    'import/resolver': {
+      "node": {
+        "extensions": ['.js', '.jsx', '.vue']
+      }
+    },
+  },
   rules: {
     "no-console": isProductionEnv ? "warn" : "off",
-    "no-debugger": isProductionEnv ? "warn" : "off"
+    "no-debugger": isProductionEnv ? "warn" : "off",
+    'import/extensions': ['error', 'always', {
+      js: 'never',
+      vue: 'never'
+    }]
   }
 };
