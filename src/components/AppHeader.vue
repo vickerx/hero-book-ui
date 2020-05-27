@@ -8,8 +8,8 @@
           <el-menu-item class="nav-item" index="/stories">英雄事迹</el-menu-item>
         </el-menu>
         <div class="btn-wrapper vertical-center" v-if="true">
-          <el-button round type="primary">登陆</el-button>
-          <el-button round >注册</el-button>
+          <el-button class="login-btn" round type="primary">登陆</el-button>
+          <SignUpModal class="sign-up-form"/>
         </div>
       </div>
     </div>
@@ -18,8 +18,13 @@
 </template>
 
 <script>
+import SignUpModal from './SignUpModal';
+
 export default {
   name: 'AppHeader',
+  components: {
+    SignUpModal,
+  },
 };
 </script>
 
@@ -84,6 +89,10 @@ export default {
     height: 100%;
     display: inline-flex;
     align-items: center;
+  }
+
+  .login-btn {
+    margin-right: 16px;
   }
 
 </style>
