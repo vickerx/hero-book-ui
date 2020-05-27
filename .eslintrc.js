@@ -1,27 +1,27 @@
-const isProductionEnv = process.env.NODE_ENV === "production";
+const isProductionEnv = process.env.NODE_ENV === 'production';
 
 module.exports = {
   root: true,
   env: {
-    node: true
+    node: true,
   },
-  extends: ["plugin:vue/essential", "eslint:recommended", "airbnb-base"],
+  extends: ['plugin:vue/essential', 'eslint:recommended', 'airbnb-base'],
   parserOptions: {
-    parser: "babel-eslint"
+    parser: 'babel-eslint',
   },
   settings: {
     'import/resolver': {
-      "node": {
-        "extensions": ['.js', '.jsx', '.vue']
-      }
+      node: {
+        extensions: ['.js', '.jsx', '.vue'],
+      },
     },
   },
   rules: {
-    "no-console": isProductionEnv ? "warn" : "off",
-    "no-debugger": isProductionEnv ? "warn" : "off",
+    'no-console': isProductionEnv ? 'warn' : 'off',
+    'no-debugger': isProductionEnv ? 'warn' : 'off',
     'import/extensions': ['error', 'always', {
       js: 'never',
-      vue: 'never'
-    }]
-  }
+      vue: 'never',
+    }],
+  },
 };
