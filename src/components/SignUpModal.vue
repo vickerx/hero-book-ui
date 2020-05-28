@@ -1,6 +1,6 @@
 <template>
   <div id="signUpModal">
-    <el-button round @click="shouldShowModal = true">注册</el-button>
+    <el-button round @click="showSignUpModal">注册</el-button>
 
     <el-dialog custom-class="modal" center title="注册"
                :visible.sync="shouldShowModal" append-to-body>
@@ -15,17 +15,17 @@
                     prefix-icon="el-icon-message" placeholder="邮箱"/>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="signUpForm.password" show-password @keyup.native="onPassword()"
+          <el-input v-model="signUpForm.password" show-password @keyup.native="replaceInvalidPwd()"
                     type="password" prefix-icon="el-icon-lock" placeholder="密码"/>
         </el-form-item>
         <el-form-item prop="checkPassword">
           <el-input v-model="signUpForm.checkPassword"
                     type="password" prefix-icon="el-icon-lock" placeholder="确认密码"/>
         </el-form-item>
-        <el-form-item class="btn-group">
-          <el-button type="primary" class="btn">注册</el-button>
-          <el-button class="btn">取消</el-button>
-        </el-form-item>
+                <el-form-item class="btn-group">
+                  <el-button type="primary" class="btn" @click="handleSubmit">注册</el-button>
+                  <el-button class="btn">取消</el-button>
+                </el-form-item>
       </el-form>
     </el-dialog>
   </div>
@@ -76,8 +76,23 @@ export default {
     };
   },
   methods: {
-    onPassword() {
+    showSignUpModal() {
+      if (this.$refs.signUpForm) {
+        this.$refs.signUpForm.resetFields();
+      }
+      this.shouldShowModal = true;
+    },
+    replaceInvalidPwd() {
       this.signUpForm.password = this.signUpForm.password.replace(/[^(\x21-\x7f)]+/g, '');
+    },
+    handleSubmit() {
+      this.$refs.signUpForm.validate((valid) => {
+        if (!valid) {
+          return;
+        }
+        //  todo: to sign up
+        this.shouldShowModal = false;
+      });
     },
   },
 };
@@ -90,7 +105,10 @@ export default {
   }
 
   .btn-group {
+    margin-bottom: 0px;
+
     /deep/ .el-form-item__content {
+      margin-top: 22px;
       display: flex;
     }
 
