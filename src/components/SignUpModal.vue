@@ -24,7 +24,7 @@
         </el-form-item>
                 <el-form-item class="btn-group">
                   <el-button type="primary" class="btn" @click="handleSubmit">注册</el-button>
-                  <el-button class="btn">取消</el-button>
+                  <el-button class="btn" @click="shouldShowModal = false">取消</el-button>
                 </el-form-item>
       </el-form>
     </el-dialog>
@@ -67,6 +67,7 @@ export default {
         password: [
           { required: true, message: '请输入密码' },
           { min: 8, max: 30, message: '密码长度为 8 到 30 个字符' },
+          { validator: () => this.$refs.signUpForm.validateField('checkPassword'), trigger: 'blur' },
         ],
         checkPassword: [
           { required: true, message: '请再次输入密码' },
