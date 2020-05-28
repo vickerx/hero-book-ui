@@ -1,5 +1,5 @@
 <template>
-  <div id="signUpModal">
+  <div>
     <el-button round @click="showSignUpModal">注册</el-button>
 
     <el-dialog custom-class="modal" center title="注册"
@@ -22,10 +22,10 @@
           <el-input v-model="signUpForm.checkPassword"
                     type="password" prefix-icon="el-icon-lock" placeholder="确认密码"/>
         </el-form-item>
-                <el-form-item class="btn-group">
-                  <el-button type="primary" class="btn" @click="handleSubmit">注册</el-button>
-                  <el-button class="btn" @click="shouldShowModal = false">取消</el-button>
-                </el-form-item>
+        <el-form-item class="btn-group">
+          <el-button type="primary" class="btn" @click="handleSubmit">注册</el-button>
+          <el-button class="btn" @click="shouldShowModal = false">取消</el-button>
+        </el-form-item>
       </el-form>
     </el-dialog>
   </div>
@@ -39,6 +39,13 @@ export default {
       const { checkPassword, password } = this.signUpForm;
       if (checkPassword !== '' && password !== '' && checkPassword !== password) {
         callback(new Error('两次输入密码不一致!'));
+      }
+      callback();
+    };
+
+    const recheckPassword = (rule, value, callback) => {
+      if (this.signUpForm.checkPassword !== '') {
+        this.$refs.signUpForm.validateField('checkPassword');
       }
       callback();
     };
@@ -62,12 +69,14 @@ export default {
         ],
         email: [
           { ...requiredNotEmptyRule, message: '请输入邮箱地址' },
-          { type: 'email', message: '请输入正确的邮箱地址' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
         ],
         password: [
           { required: true, message: '请输入密码' },
-          { min: 8, max: 30, message: '密码长度为 8 到 30 个字符' },
-          { validator: () => this.$refs.signUpForm.validateField('checkPassword'), trigger: 'blur' },
+          {
+            min: 8, max: 30, message: '密码长度为 8 到 30 个字符', trigger: 'blur',
+          },
+          { validator: recheckPassword, trigger: 'blur' },
         ],
         checkPassword: [
           { required: true, message: '请再次输入密码' },
@@ -88,11 +97,10 @@ export default {
     },
     handleSubmit() {
       this.$refs.signUpForm.validate((valid) => {
-        if (!valid) {
-          return;
+        if (valid) {
+          //  todo: to sign up
+          this.shouldShowModal = false;
         }
-        //  todo: to sign up
-        this.shouldShowModal = false;
       });
     },
   },
