@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "../common/styles/colors";
+  @import "../../common/styles/colors";
 
   $header-height: 70px;
   $margin: 32px;
@@ -37,14 +37,22 @@ export default {
   header {
     width: 100%;
     text-align: left;
+  }
+
+  #app-header {
+    height: $header-height;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    box-shadow: 0 0 1px 1px $shadow;
+    width: 100%;
     background-color: white;
   }
 
   .content {
     height: 100%;
-    min-width: 1200px;
-    max-width: 1400px;
-    margin: 0 auto;
+    margin: 0 8%;
 
     .logo {
       color: $theme;
@@ -67,16 +75,6 @@ export default {
     .btn-wrapper {
       float: right;
     }
-  }
-
-  #app-header {
-    height: $header-height;
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 999;
-    box-shadow: 0 0 1px 1px $shadow;
-    width: 100%;
   }
 
   .header-placeholder {

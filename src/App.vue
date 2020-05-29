@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import AppHeader from './components/AppHeader';
+import AppHeader from './components/app-header/AppHeader';
 
 export default {
   name: 'App',
@@ -26,4 +26,8 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+  main {
+    margin: 0 10%;
+  }
 </style>
