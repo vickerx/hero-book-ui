@@ -23,13 +23,12 @@ const routes = [
     component: SignUpActivation,
   },
   {
-    path: '/*',
+    path: '*',
     redirect: '/',
   },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
   routes,
 });
 
