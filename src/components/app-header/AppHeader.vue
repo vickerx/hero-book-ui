@@ -22,9 +22,7 @@ import SignUpModal from './SignUpModal';
 
 export default {
   name: 'AppHeader',
-  components: {
-    SignUpModal,
-  },
+  components: { SignUpModal },
 };
 </script>
 
@@ -44,7 +42,7 @@ export default {
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 999;
+    z-index: 99999;
     box-shadow: 0 0 1px 1px $shadow;
     width: 100%;
     background-color: white;

@@ -1,7 +1,13 @@
-import { UPDATE_STORIES } from './mutation-types';
+import {
+  UPDATE_STORIES,
+  CLEAR_STORIES,
+} from './mutation-types';
 
 export default {
   [UPDATE_STORIES](state, stories) {
-    state.stories = stories;
+    state.stories = { ...state.stories, ...stories };
+  },
+  [CLEAR_STORIES](state) {
+    state.stories = {};
   },
 };

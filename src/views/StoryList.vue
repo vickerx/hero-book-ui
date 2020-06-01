@@ -1,11 +1,14 @@
 <template>
-  <div class="story-list">
+  <div class="story-list" v-loading.fullscreen="stories.loading">
     <div class="content">
       <StoryCard v-for="story in stories.content" :key="story.id" :story="story"></StoryCard>
     </div>
     <div class="pagination">
-      <el-pagination layout="prev, pager, next" hide-on-single-page
-                     :current-page="stories.currentPage" :page-count="stories.totalPages">
+      <el-pagination layout="prev, pager, next"
+                     hide-on-single-page
+                     :current-page.sync="currentPage"
+                     :page-count="stories.totalPages"
+                     @current-change="fetchStories">
       </el-pagination>
     </div>
   </div>
@@ -18,10 +21,18 @@ import StoryCard from '../components/story-list/StoryCard';
 export default {
   name: 'StoryList',
   components: { StoryCard },
+  data() {
+    return { currentPage: 1 };
+  },
   computed: { ...mapState(['stories']) },
-  methods: { ...mapActions(['getStories']) },
+  methods: {
+    ...mapActions(['getStories']),
+    fetchStories() {
+      this.getStories(this.currentPage);
+    },
+  },
   created() {
-    this.getStories(1, 20);
+    this.fetchStories();
   },
 };
 </script>
@@ -29,10 +40,6 @@ export default {
 <style scoped lang="scss">
   @import "../common/styles/colors";
 
-  .story-list {
-    height: 100%;
-
-  }
   .content {
     position: relative;
   }
