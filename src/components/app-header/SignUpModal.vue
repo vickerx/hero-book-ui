@@ -50,9 +50,7 @@ export default {
       callback();
     };
 
-    const requiredNotEmptyRule = {
-      type: 'string', required: true, transform: (value) => value.trim(),
-    };
+    const requiredNotEmptyRule = { type: 'string', required: true, transform: (value) => value.trim() };
 
     return {
       shouldShowModal: false,

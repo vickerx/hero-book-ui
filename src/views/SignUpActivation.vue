@@ -3,9 +3,7 @@
 </template>
 
 <script>
-export default {
-  name: 'SignUpActivation',
-};
+export default { name: 'SignUpActivation' };
 </script>
 
 <style scoped>

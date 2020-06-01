@@ -29,9 +29,7 @@ export default {
       }),
     },
   },
-  methods: {
-    format: (time) => formatUpdatedTime(time),
-  },
+  methods: { format: (time) => formatUpdatedTime(time) },
 };
 </script>
 
