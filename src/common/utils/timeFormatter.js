@@ -1,13 +1,8 @@
-export const getDate = (timeStamp) => {
-  const date = new Date();
-  date.setTime(timeStamp);
-  return date;
-};
-
-export const formatDate = (timeStamp, fmt) => {
+export const formatDate = (date, fmt) => {
+  if (date == null || !(date instanceof Date)) {
+    return null;
+  }
   let result = fmt;
-
-  const date = getDate(timeStamp);
 
   const mapper = {
     'M+': date.getMonth() + 1, // 月份
@@ -35,14 +30,17 @@ export const formatDate = (timeStamp, fmt) => {
 };
 
 export const formatUpdatedTime = (timeStamp) => {
-  const date = getDate(timeStamp).getDate();
-  const today = getDate(Date.now()).getDate();
-  switch (date) {
-    case today:
+  const today = new Date();
+  const date = new Date(timeStamp);
+  const todayMS = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+  const dateMS = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+
+  switch (dateMS) {
+    case todayMS:
       return '今天';
-    case today - 1:
+    case todayMS - 24 * 3600 * 1000:
       return '昨天';
     default:
-      return formatDate(timeStamp, 'yyyy年MM月dd日');
+      return formatDate(date, 'yyyy年MM月dd日');
   }
 };

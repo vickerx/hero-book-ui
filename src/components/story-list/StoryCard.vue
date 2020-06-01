@@ -2,7 +2,7 @@
   <el-card class="story-card">
     <div class="story-header">
        <span class="flex-item title">
-         <router-link to="/" class="link">{{story.title}}</router-link>
+         <router-link :to="this.$route.path" class="link">{{story.title}}</router-link>
        </span>
       <span class="flex-item author">发布人：{{story.author}}</span>
       <span class="flex-item update-time">更新时间：{{format(story.updatedTime)}}</span>
