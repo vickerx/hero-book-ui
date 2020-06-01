@@ -9,4 +9,4 @@ Vue.use(VueAxios, axiosInstance);
 const api = Vue.axios;
 
 // eslint-disable-next-line import/prefer-default-export
-export const signUp = () => api.get('');
+export const getStories = (page, size) => api.get(`/api/hero-story?page=${page}&size=${size}`);

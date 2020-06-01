@@ -19,6 +19,8 @@ module.exports = {
   rules: {
     'no-console': isProductionEnv ? 'warn' : 'off',
     'no-debugger': isProductionEnv ? 'warn' : 'off',
+    'no-param-reassign': ['error', { props: false }],
+    'object-curly-newline': ['error', { consistent: true }],
     'import/extensions': ['error', 'always', {
       js: 'never',
       vue: 'never',
