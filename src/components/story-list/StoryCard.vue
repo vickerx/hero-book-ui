@@ -54,7 +54,7 @@ export default {
   }
 
   .title {
-    flex: 4;
+    flex: 5;
 
     .link {
       color: $default-font-color;
@@ -68,6 +68,6 @@ export default {
   }
 
   .update-time,.author {
-    flex: 1;
+    flex: 2;
   }
 </style>

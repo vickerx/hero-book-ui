@@ -1,5 +1,7 @@
 <template>
   <div class="story-list" v-loading.fullscreen="stories.loading">
+    <el-alert v-if="stories.error" :title="stories.error" type="error" center show-icon>
+    </el-alert>
     <div class="content">
       <StoryCard v-for="story in stories.content" :key="story.id" :story="story"></StoryCard>
     </div>

@@ -6,7 +6,7 @@ import {
 
 export default {
   getStories({ commit }, page = 1, size = 20) {
-    commit(UPDATE_STORIES, { loading: true });
+    commit(UPDATE_STORIES, { loading: true, error: '' });
 
     return getStories(page - 1, size)
       .then(
@@ -17,7 +17,7 @@ export default {
         },
       ).catch(() => {
         commit(CLEAR_STORIES);
-        commit(UPDATE_STORIES, { loading: false });
+        commit(UPDATE_STORIES, { error: '获取数据失败，请稍后重试！', loading: false });
       });
   },
 };
