@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home';
 import StoryList from '../views/StoryList';
 import SignUpActivation from '../views/SignUpActivation';
+import StoryDetail from '../views/StoryDetail';
 
 Vue.use(VueRouter);
 
@@ -25,6 +26,11 @@ const routes = [
     path: '/signup-active/:token',
     name: 'SignUpActivation',
     component: SignUpActivation,
+  },
+  {
+    path: '/story/:id',
+    name: 'StoryDetail',
+    component: StoryDetail,
   },
   {
     path: '*',
