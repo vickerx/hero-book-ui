@@ -33,16 +33,16 @@ export default {
       this.$router.push({ path: `/stories/page/${this.currentPage}` });
     },
     fetchStories() {
+      this.currentPage = Number(this.$route.params.page);
       this.getStories(this.currentPage);
     },
   },
   created() {
-    this.currentPage = Number(this.$route.params.page);
     this.fetchStories();
   },
   beforeRouteUpdate(to, from, next) {
-    this.fetchStories();
     next();
+    this.fetchStories();
   },
 };
 </script>
