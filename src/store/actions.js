@@ -5,7 +5,7 @@ import {
 } from './mutation-types';
 
 export default {
-  getStories({ commit }, page = 1, size = 20) {
+  getStories({ commit }, page = 1, size = 5) {
     commit(UPDATE_STORIES, { loading: true, error: '' });
 
     return getStories(page - 1, size)

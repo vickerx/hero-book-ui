@@ -10,7 +10,7 @@
                      hide-on-single-page
                      :current-page.sync="currentPage"
                      :page-count="stories.totalPages"
-                     @current-change="fetchStories">
+                     @current-change="onCurrentPageChange">
       </el-pagination>
     </div>
   </div>
@@ -29,12 +29,20 @@ export default {
   computed: { ...mapState(['stories']) },
   methods: {
     ...mapActions(['getStories']),
+    onCurrentPageChange() {
+      this.$router.push({ path: `/stories/page/${this.currentPage}` });
+    },
     fetchStories() {
       this.getStories(this.currentPage);
     },
   },
   created() {
+    this.currentPage = Number(this.$route.params.page);
     this.fetchStories();
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.fetchStories();
+    next();
   },
 };
 </script>
