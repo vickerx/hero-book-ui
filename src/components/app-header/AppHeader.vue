@@ -64,7 +64,7 @@ export default {
       float: left;
 
       img {
-        height: 60px;
+        height: $header-height - 5px;
         margin-right: $basic-margin / 2;
       }
     }
