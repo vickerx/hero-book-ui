@@ -35,10 +35,11 @@ export default {
 
 <style scoped lang="scss">
   @import "../../common/styles/colors";
+  @import "../../common/styles/dimens";
 
   .story-card {
     text-align: left;
-    margin-bottom: 16px;
+    margin-bottom: $basic-margin;
   }
 
   .story-header {
@@ -46,7 +47,7 @@ export default {
   }
 
   .flex-item {
-    margin-right: 32px;
+    margin-right: $basic-margin * 2;
 
     &:last-child {
       margin-right: 0;

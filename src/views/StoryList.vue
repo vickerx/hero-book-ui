@@ -1,5 +1,5 @@
 <template>
-  <div class="story-list" v-loading.fullscreen="stories.loading">
+  <div class="story-list" v-loading="stories.loading">
     <el-alert v-if="stories.error" :title="stories.error" type="error" center show-icon>
     </el-alert>
     <div class="content">

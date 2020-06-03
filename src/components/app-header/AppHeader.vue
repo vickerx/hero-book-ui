@@ -28,9 +28,9 @@ export default {
 
 <style scoped lang="scss">
   @import "../../common/styles/colors";
+  @import "../../common/styles/dimens";
 
   $header-height: 70px;
-  $margin: 32px;
 
   header {
     width: 100%;
@@ -42,7 +42,7 @@ export default {
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 99999;
+    z-index: $header-z-index;
     box-shadow: 0 0 1px 1px $shadow;
     width: 100%;
     background-color: white;
@@ -54,7 +54,7 @@ export default {
 
     .logo {
       color: $theme;
-      margin-right: $margin;
+      margin-right: $basic-margin * 2;
       font-size: 36px;
       font-weight: bold;
       text-decoration-line: none;
@@ -63,7 +63,7 @@ export default {
 
     .app-nav {
       border-bottom: none;
-      margin-right: $margin;
+      margin-right: $basic-margin * 2;
 
       .nav-item {
         height: 50px;
@@ -88,7 +88,7 @@ export default {
   }
 
   .login-btn {
-    margin-right: 16px;
+    margin-right: $basic-margin;
   }
 
 </style>

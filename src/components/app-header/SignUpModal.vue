@@ -104,6 +104,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  @import "../../common/styles/dimens";
+
   /deep/ .modal {
     width: 400px;
     padding: 0 20px;
@@ -113,7 +115,7 @@ export default {
     margin-bottom: 0px;
 
     /deep/ .el-form-item__content {
-      margin-top: 22px;
+      margin-top: $basic-margin * 2;
       display: flex;
     }
 
