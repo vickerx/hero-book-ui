@@ -14,10 +14,6 @@ const routes = [
     component: Home,
   },
   {
-    path: '/stories',
-    redirect: '/stories/page/1',
-  },
-  {
     path: '/stories/page/:page',
     name: 'StoryList',
     component: StoryList,

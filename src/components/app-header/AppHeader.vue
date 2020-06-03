@@ -8,7 +8,7 @@
         </router-link>
         <el-menu class="app-nav vertical-center"
                  router :default-active="$route.path" mode="horizontal">
-          <el-menu-item class="nav-item" index="/stories">英雄事迹</el-menu-item>
+          <el-menu-item class="nav-item" index="/stories/page/1">英雄事迹</el-menu-item>
         </el-menu>
         <div class="btn-wrapper vertical-center" v-if="true">
           <el-button class="login-btn" round type="primary">登陆</el-button>
