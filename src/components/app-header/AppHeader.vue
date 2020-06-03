@@ -2,7 +2,10 @@
   <header>
     <div id="app-header">
       <div class="content">
-        <router-link class="logo vertical-center" to="/"><span>HeroStories</span></router-link>
+        <router-link class="logo vertical-center" to="/">
+          <img src="../../assets/logo.png">
+          <span>HeroStories</span>
+        </router-link>
         <el-menu class="app-nav vertical-center"
                  router :default-active="$route.path" mode="horizontal">
           <el-menu-item class="nav-item" index="/stories">英雄事迹</el-menu-item>
@@ -59,6 +62,11 @@ export default {
       font-weight: bold;
       text-decoration-line: none;
       float: left;
+
+      img {
+        height: 60px;
+        margin-right: $basic-margin / 2;
+      }
     }
 
     .app-nav {
