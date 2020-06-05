@@ -1,7 +1,7 @@
 let baseUrl = '';
 
 if (process.env.NODE_ENV === 'development') {
-  baseUrl = 'http://localhost:8081';
+  baseUrl = '';
 }
 
 const BASE_URL = baseUrl;

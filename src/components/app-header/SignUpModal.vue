@@ -1,9 +1,15 @@
 <template>
   <div>
-    <el-button round @click="showSignUpModal">注册</el-button>
+    <el-button round @click="shouldShowModal = true">注册</el-button>
 
     <el-dialog custom-class="modal" center title="注册"
+               @close="resetForm" destroy-on-close
                :visible.sync="shouldShowModal" append-to-body>
+
+      <el-alert class="modal-alert" center v-if="network.message"
+                effect="dark" show-icon :title="network.message" :type="alertType">
+      </el-alert>
+
       <el-form class="sign-up-form" label-width="auto"
                :model="signUpForm" :rules="rules" ref="signUpForm">
         <el-form-item prop="username">
@@ -23,7 +29,9 @@
                     type="password" prefix-icon="el-icon-lock" placeholder="确认密码"/>
         </el-form-item>
         <el-form-item class="btn-group">
-          <el-button type="primary" class="btn" @click="handleSubmit">注册</el-button>
+          <el-button type="primary" class="btn" @click="handleSubmit" :disabled="submitBtnDisabled">
+            注册
+          </el-button>
           <el-button class="btn" @click="shouldShowModal = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -32,6 +40,9 @@
 </template>
 
 <script>
+import { mapActions, mapState, mapMutations } from 'vuex';
+import { RESET_SIGN_UP_NETWORK } from '../../store/mutation-types';
+
 export default {
   name: 'SignUpModal',
   data() {
@@ -54,6 +65,7 @@ export default {
 
     return {
       shouldShowModal: false,
+      submitBtnDisabled: false,
       signUpForm: {
         password: '',
         email: '',
@@ -81,12 +93,19 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState({ network: 'signUpNetwork' }),
+    alertType() {
+      return this.network.isSuccess ? 'success' : 'error';
+    },
+  },
   methods: {
-    showSignUpModal() {
-      if (this.$refs.signUpForm) {
-        this.$refs.signUpForm.resetFields();
-      }
-      this.shouldShowModal = true;
+    ...mapActions(['registerUser']),
+    ...mapMutations({ resetNetWorkState: RESET_SIGN_UP_NETWORK }),
+    resetForm() {
+      this.submitBtnDisabled = false;
+      this.$refs.signUpForm.resetFields();
+      this.resetNetWorkState();
     },
     replaceInvalidPwd() {
       this.signUpForm.password = this.signUpForm.password.replace(/[^(\x21-\x7f)]+/g, '');
@@ -94,8 +113,10 @@ export default {
     handleSubmit() {
       this.$refs.signUpForm.validate((valid) => {
         if (valid) {
-          //  todo: to sign up
-          this.shouldShowModal = false;
+          const { username, password, email } = this.signUpForm;
+          const userInfo = { username: username.trim(), password, email };
+          this.submitBtnDisabled = true;
+          this.registerUser(userInfo);
         }
       });
     },
@@ -122,5 +143,11 @@ export default {
     .btn {
       flex: 1;
     }
+  }
+
+  .modal-alert {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 </style>

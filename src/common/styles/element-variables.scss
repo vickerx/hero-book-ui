@@ -13,3 +13,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   z-index: $header-z-index - 1;
 }
 
+.modal-alert {
+  opacity: 0.8;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+
+  &.el-alert--success {
+    background-color: $theme;
+  }
+}
+

@@ -8,5 +8,10 @@ Vue.use(VueAxios, axiosInstance);
 
 const api = Vue.axios;
 
-// eslint-disable-next-line import/prefer-default-export
-export const getStories = (page, size) => api.get(`/api/hero-story?page=${page}&size=${size}`);
+// moved after gateway used
+const CORE_URL = 'http://localhost:8081';
+const AUTH_URL = 'http://localhost:8083';
+
+export const getStories = (page, size) => api.get(`${CORE_URL}/api/hero-story?page=${page}&size=${size}`);
+
+export const registerUser = (userInfo) => api.post(`${AUTH_URL}/user/registration`, null, { params: userInfo });
