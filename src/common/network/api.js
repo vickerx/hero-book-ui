@@ -15,3 +15,5 @@ const AUTH_URL = 'http://localhost:8083';
 export const getStories = (page, size) => api.get(`${CORE_URL}/api/hero-story?page=${page}&size=${size}`);
 
 export const registerUser = (userInfo) => api.post(`${AUTH_URL}/user/registration`, null, { params: userInfo });
+
+export const activeUser = (code) => api.get(`${AUTH_URL}/user/activate`, { params: { code } });
