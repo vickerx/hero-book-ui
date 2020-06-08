@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { getStories, registerUser } from '../common/network/api';
+import { getStories, registerUser, activeUser } from '../common/network/api';
 import {
   UPDATE_STORIES,
   CLEAR_STORIES,
@@ -29,10 +29,10 @@ export default {
       .then(() => commit(UPDATE_SIGN_UP_NETWORK, { isSuccess: true, message: '注册成功，请前往注册邮箱激活帐户' }))
       .catch((error) => {
         const errorCode = _.get(error.response, 'data.error_code');
-        const message = errorCode === ERROR_CODE.DUPLICATE_EMAIL.code
-          ? ERROR_CODE.DUPLICATE_EMAIL.massage
-          : ERROR_MASSAGE.SYSTEM_ERROR;
-        commit(UPDATE_SIGN_UP_NETWORK, { isSuccess: false, message });
+        const { DUPLICATE_EMAIL } = ERROR_CODE;
+        const isDuplicateEmail = errorCode === DUPLICATE_EMAIL.code;
+        const message = isDuplicateEmail ? DUPLICATE_EMAIL.massage : ERROR_MASSAGE.SYSTEM_ERROR;
+        commit(UPDATE_SIGN_UP_NETWORK, { isSuccess: false, message, isDuplicateEmail });
         throw new Error();
       });
   },

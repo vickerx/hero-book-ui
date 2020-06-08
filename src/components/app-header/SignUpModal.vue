@@ -5,8 +5,9 @@
     <el-dialog custom-class="modal" center title="注册" @close="resetForm"
                :visible.sync="shouldShowModal" append-to-body>
 
-      <el-alert class="modal-alert" center v-if="network.message"
-                effect="dark" show-icon :title="network.message" :type="alertType">
+      <el-alert class="modal-alert" center show-icon
+                v-if="network.message && !network.isDuplicateEmail"
+                effect="dark" :title="network.message" :type="alertType">
       </el-alert>
 
       <el-form class="sign-up-form" label-width="auto"
@@ -59,6 +60,13 @@ export default {
       callback();
     };
 
+    const validateDuplicateEmail = (rule, value, callback) => {
+      if (value && this.network.isDuplicateEmail) {
+        callback(new Error(this.network.message));
+      }
+      callback();
+    };
+
     const requiredNotEmptyRule = { type: 'string', required: true, transform: (value) => value.trim() };
 
     return {
@@ -78,6 +86,7 @@ export default {
         email: [
           { ...requiredNotEmptyRule, message: '请输入邮箱地址' },
           { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
+          { validator: validateDuplicateEmail },
         ],
         password: [
           { required: true, message: '请输入密码' },
@@ -111,13 +120,16 @@ export default {
     handleSubmit() {
       this.resetNetWorkState();
       this.$refs.signUpForm.validate((valid) => {
-        if (!valid) {
-          return;
+        if (valid) {
+          this.submitBtnDisabled = true;
+          this.toRegisterUser();
         }
-        this.submitBtnDisabled = true;
-        this.registerUser(this.signUpForm).catch(() => {
-          this.submitBtnDisabled = false;
-        });
+      });
+    },
+    toRegisterUser() {
+      this.registerUser(this.signUpForm).catch(() => {
+        this.submitBtnDisabled = false;
+        this.$refs.signUpForm.validateField('email');
       });
     },
   },
