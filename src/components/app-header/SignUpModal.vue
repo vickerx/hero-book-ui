@@ -2,8 +2,7 @@
   <div>
     <el-button round @click="shouldShowModal = true">注册</el-button>
 
-    <el-dialog custom-class="modal" center title="注册"
-               @close="resetForm" destroy-on-close
+    <el-dialog custom-class="modal" center title="注册" @close="resetForm"
                :visible.sync="shouldShowModal" append-to-body>
 
       <el-alert class="modal-alert" center v-if="network.message"
@@ -29,9 +28,8 @@
                     type="password" prefix-icon="el-icon-lock" placeholder="确认密码"/>
         </el-form-item>
         <el-form-item class="btn-group">
-          <el-button type="primary" class="btn" @click="handleSubmit" :disabled="submitBtnDisabled">
-            注册
-          </el-button>
+          <el-button type="primary" class="btn" @click="handleSubmit"
+                     :disabled="submitBtnDisabled">注册</el-button>
           <el-button class="btn" @click="shouldShowModal = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -111,13 +109,15 @@ export default {
       this.signUpForm.password = this.signUpForm.password.replace(/[^(\x21-\x7f)]+/g, '');
     },
     handleSubmit() {
+      this.resetNetWorkState();
       this.$refs.signUpForm.validate((valid) => {
-        if (valid) {
-          const { username, password, email } = this.signUpForm;
-          const userInfo = { username: username.trim(), password, email };
-          this.submitBtnDisabled = true;
-          this.registerUser(userInfo);
+        if (!valid) {
+          return;
         }
+        this.submitBtnDisabled = true;
+        this.registerUser(this.signUpForm).catch(() => {
+          this.submitBtnDisabled = false;
+        });
       });
     },
   },
