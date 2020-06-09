@@ -1,13 +1,13 @@
 <template>
   <div>
-    <el-button round @click="shouldShowModal = true">注册</el-button>
+    <el-button round @click="showModal">注册</el-button>
 
-    <el-dialog custom-class="modal" center title="注册" @close="resetForm"
+    <el-dialog custom-class="modal" center title="注册"
                :visible.sync="shouldShowModal" append-to-body>
 
       <el-alert class="modal-alert" center show-icon
-                v-if="network.message && !network.isDuplicateEmail"
-                effect="dark" :title="network.message" :type="alertType">
+                v-if="message" effect="dark"
+                :title="message" :type="isSuccess ? 'success' : 'error'">
       </el-alert>
 
       <el-form class="sign-up-form" label-width="auto"
@@ -39,8 +39,11 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex';
-import { RESET_SIGN_UP_NETWORK } from '../../store/mutation-types';
+import * as _ from 'lodash';
+import { registerUser } from '../../common/network/api';
+import { ERROR_CODE, ERROR_MASSAGE } from '../../common/network/errors';
+
+const successMsg = '注册成功，请前往注册邮箱激活帐户';
 
 export default {
   name: 'SignUpModal',
@@ -61,8 +64,8 @@ export default {
     };
 
     const validateDuplicateEmail = (rule, value, callback) => {
-      if (value && this.network.isDuplicateEmail) {
-        callback(new Error(this.network.message));
+      if (value && this.isDuplicateEmail) {
+        callback(new Error(ERROR_CODE.DUPLICATE_EMAIL.massage));
       }
       callback();
     };
@@ -72,6 +75,9 @@ export default {
     return {
       shouldShowModal: false,
       submitBtnDisabled: false,
+      isSuccess: false,
+      isDuplicateEmail: false,
+      message: '',
       signUpForm: {
         password: '',
         email: '',
@@ -100,37 +106,46 @@ export default {
       },
     };
   },
-  computed: {
-    ...mapState({ network: 'signUpNetwork' }),
-    alertType() {
-      return this.network.isSuccess ? 'success' : 'error';
-    },
-  },
   methods: {
-    ...mapActions(['registerUser']),
-    ...mapMutations({ resetNetWorkState: RESET_SIGN_UP_NETWORK }),
-    resetForm() {
+    showModal() {
+      if (this.$refs.signUpForm) {
+        this.$refs.signUpForm.resetFields();
+      }
+      this.resetState();
       this.submitBtnDisabled = false;
-      this.$refs.signUpForm.resetFields();
-      this.resetNetWorkState();
+      this.shouldShowModal = true;
+    },
+    resetState() {
+      this.isSuccess = false;
+      this.message = '';
+      this.isDuplicateEmail = false;
     },
     replaceInvalidPwd() {
       this.signUpForm.password = this.signUpForm.password.replace(/[^(\x21-\x7f)]+/g, '');
     },
     handleSubmit() {
-      this.resetNetWorkState();
+      this.resetState();
       this.$refs.signUpForm.validate((valid) => {
         if (valid) {
           this.submitBtnDisabled = true;
-          this.toRegisterUser();
+          this.registerUser();
         }
       });
     },
-    toRegisterUser() {
-      this.registerUser(this.signUpForm).catch(() => {
-        this.submitBtnDisabled = false;
-        this.$refs.signUpForm.validateField('email');
-      });
+    registerUser() {
+      registerUser(this.signUpForm)
+        .then(() => {
+          this.isSuccess = true;
+          this.message = successMsg;
+        })
+        .catch(({ response }) => this.handleRegisterFailed(_.get(response, 'data.error_code')));
+    },
+    handleRegisterFailed(errorCode) {
+      this.isSuccess = false;
+      this.submitBtnDisabled = false;
+      this.isDuplicateEmail = errorCode === ERROR_CODE.DUPLICATE_EMAIL.code;
+      this.message = this.isDuplicateEmail ? '' : ERROR_MASSAGE.SYSTEM_ERROR;
+      this.$refs.signUpForm.validateField('email');
     },
   },
 };

@@ -4,14 +4,16 @@
       <h2>激活成功！</h2>
       <h3>{{time}}s 后跳转至<router-link :to="homePath">网站主页</router-link>...</h3>
     </div>
-    <div v-if="!isLoading && !isSuccess">
+    <div v-if="!isSuccess">
       <h2>{{error}}</h2>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import * as _ from 'lodash';
+import { activeUser } from '../common/network/api';
+import { ERROR_CODE, ERROR_MASSAGE } from '../common/network/errors';
 
 export default {
   name: 'SignUpActivation',
@@ -26,7 +28,19 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['activeUser']),
+    activeUser() {
+      activeUser(this.$route.params.token)
+        .then(() => {
+          this.isSuccess = true;
+          this.countDown();
+        })
+        .catch(({ response }) => {
+          const errorCode = _.get(response, 'data.error_code');
+          this.error = _.find(_.values(ERROR_CODE), (value) => value.code === errorCode).message
+            || ERROR_MASSAGE.SYSTEM_ERROR;
+          this.isSuccess = false;
+        });
+    },
     countDown() {
       this.interval = setInterval(() => {
         this.time -= 1;
@@ -38,17 +52,7 @@ export default {
     },
   },
   created() {
-    this.activeUser(this.$route.params.token)
-      .then(() => {
-        this.isLoading = false;
-        this.isSuccess = true;
-        this.countDown();
-      })
-      .catch((error) => {
-        this.isLoading = false;
-        this.isSuccess = false;
-        this.error = error.message;
-      });
+    this.activeUser();
   },
   destroyed() {
     clearInterval(this.interval);

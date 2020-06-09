@@ -1,6 +1,6 @@
 <template>
-  <div class="story-list" v-loading="stories.loading">
-    <el-alert v-if="stories.error" :title="stories.error" type="error" center show-icon>
+  <div class="story-list" v-loading="isLoading">
+    <el-alert v-if="error" :title="error" type="error" center show-icon>
     </el-alert>
 
     <div  v-if="stories.content && stories.content.length > 0" class="content">
@@ -28,7 +28,11 @@ export default {
   name: 'StoryList',
   components: { StoryCard },
   data() {
-    return { currentPage: 1 };
+    return {
+      currentPage: 1,
+      isLoading: true,
+      error: '',
+    };
   },
   computed: { ...mapState(['stories']) },
   methods: {
@@ -36,9 +40,17 @@ export default {
     onCurrentPageChange() {
       this.$router.push({ path: `/stories/page/${this.currentPage}` });
     },
-    fetchStories() {
+    resetState() {
+      this.isLoading = true;
+      this.error = '';
+    },
+    async fetchStories() {
+      this.resetState();
       this.currentPage = Number(this.$route.params.page);
-      this.getStories(this.currentPage);
+      await this.getStories(this.currentPage).catch((error) => {
+        this.error = error;
+      });
+      this.isLoading = false;
     },
   },
   created() {
@@ -78,6 +90,5 @@ export default {
     margin-top: $basic-margin * 2;
     color: $grey;
   }
-
 
 </style>

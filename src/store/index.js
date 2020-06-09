@@ -5,13 +5,7 @@ import mutations from './mutations';
 
 Vue.use(Vuex);
 
-const state = {
-  stories: {},
-  signUpNetwork: {
-    isSuccess: false,
-    message: '',
-  },
-};
+const state = { stories: {} };
 
 export default new Vuex.Store({
   state,
