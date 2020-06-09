@@ -11,7 +11,7 @@
           <el-menu-item class="nav-item" index="/stories/page/1">英雄事迹</el-menu-item>
         </el-menu>
         <div class="btn-wrapper vertical-center" v-if="true">
-          <el-button class="login-btn" round type="primary">登录</el-button>
+          <sign-in-modal title="登录">登录</sign-in-modal>
           <SignUpModal class="sign-up-form"/>
         </div>
       </div>
@@ -22,10 +22,11 @@
 
 <script>
 import SignUpModal from './SignUpModal';
+import SignInModal from './SignInModal';
 
 export default {
   name: 'AppHeader',
-  components: { SignUpModal },
+  components: { SignUpModal, SignInModal },
 };
 </script>
 
