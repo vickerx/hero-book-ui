@@ -9,7 +9,7 @@ module.exports = {
     proxy: {
       '/api': {
         logLevel: 'debug',
-        target: 'http://localhost:10010/',
+        target: 'http://localhost:10010',
         changeOrigin: true,
         pathRewrite(path) {
           return path.replace('/api', '');
