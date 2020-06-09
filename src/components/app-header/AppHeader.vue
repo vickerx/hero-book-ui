@@ -11,7 +11,7 @@
           <el-menu-item class="nav-item" index="/stories/page/1">英雄事迹</el-menu-item>
         </el-menu>
         <div class="btn-wrapper vertical-center" v-if="true">
-          <el-button class="login-btn" round type="primary">登陆</el-button>
+          <el-button class="login-btn" round type="primary">登录</el-button>
           <SignUpModal class="sign-up-form"/>
         </div>
       </div>

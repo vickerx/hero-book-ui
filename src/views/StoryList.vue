@@ -2,9 +2,13 @@
   <div class="story-list" v-loading="stories.loading">
     <el-alert v-if="stories.error" :title="stories.error" type="error" center show-icon>
     </el-alert>
-    <div class="content">
+
+    <div  v-if="stories.content && stories.content.length > 0" class="content">
       <StoryCard v-for="story in stories.content" :key="story.id" :story="story"></StoryCard>
     </div>
+
+    <div v-else class="empty">暂无数据</div>
+
     <div class="pagination">
       <el-pagination layout="prev, pager, next"
                      hide-on-single-page
@@ -49,13 +53,31 @@ export default {
 
 <style scoped lang="scss">
   @import "../common/styles/colors";
+  @import "../common/styles/dimens";
+
+  .story-list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100%;
+    max-height: fit-content;
+    margin-top: $basic-margin;
+    justify-content: space-between;
+    width: 100%;
+  }
 
   .content {
-    position: relative;
+    width: 100%;
   }
 
   .pagination {
-   margin: 32px auto;
+    margin: $basic-margin * 4 auto;
   }
+
+  .empty {
+    margin-top: $basic-margin * 2;
+    color: $grey;
+  }
+
 
 </style>

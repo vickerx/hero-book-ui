@@ -90,7 +90,7 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码' },
-          { min: 8, max: 30, message: '密码长度为 8 到 30 个字符', trigger: 'blur' },
+          { min: 8, max: 30, message: '密码长度为 8 到 30 个字符' },
           { validator: recheckPassword, trigger: 'blur' },
         ],
         checkPassword: [
