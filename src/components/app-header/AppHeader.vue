@@ -96,8 +96,8 @@ export default {
     align-items: center;
   }
 
-  .login-btn {
-    margin-right: $basic-margin;
+  .sign-up-form {
+    margin-left: $basic-margin;
   }
 
 </style>
