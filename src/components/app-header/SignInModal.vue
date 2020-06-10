@@ -70,6 +70,7 @@ export default {
         .catch(() => { this.submitBtnDisabled = false; });
       if (code === 0) {
         this.alert.type = 'success';
+        this.shouldShowModal = false;
       } else {
         this.alert.type = 'error';
       }

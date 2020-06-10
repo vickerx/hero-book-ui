@@ -14,3 +14,5 @@ export const activeUser = (code) => axios.get(`${AUTH_URL}/user/activate`, { par
 export const login = (email, password) => axios.post(`${GATEWAY}/login?email=${email}&password=${password}`);
 
 export const logout = () => axios.post(`${GATEWAY}/logout`);
+
+export const getUserInfo = () => axios.get(`${AUTH_URL}/user/info`);
