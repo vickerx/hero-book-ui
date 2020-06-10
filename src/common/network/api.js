@@ -16,3 +16,5 @@ export const login = (email, password) => axios.post(`${GATEWAY}/login?email=${e
 export const logout = () => axios.post(`${GATEWAY}/logout`);
 
 export const getUserInfo = () => axios.get(`${AUTH_URL}/user/info`);
+
+export const uploadImage = (image) => axios.put('api/storyservice/hero-story/image', image);
