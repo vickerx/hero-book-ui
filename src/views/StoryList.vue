@@ -1,21 +1,31 @@
 <template>
-  <div class="story-list" v-loading="isLoading">
+  <div class="story-list column-flex" v-loading="isLoading">
     <el-alert v-if="error" :title="error" type="error" center show-icon>
     </el-alert>
 
-    <div  v-if="stories.content && stories.content.length > 0" class="content">
-      <StoryCard v-for="story in stories.content" :key="story.id" :story="story"></StoryCard>
+    <div class="menu">
+      <div class="post-story-btn">
+        <el-button :type="isLogin ? 'primary' : 'info'" :disabled="!isLogin"
+                   @click="handlePostStoryBtnClick">
+          发布英雄故事</el-button>
+        <span v-if="!isLogin" class="hint">登录后可发布英雄事迹</span>
+      </div>
     </div>
 
-    <div v-else class="empty">暂无数据</div>
+    <div class="content column-flex">
+      <div  v-if="stories.content && stories.content.length > 0" class="stories">
+        <StoryCard v-for="story in stories.content" :key="story.id" :story="story"></StoryCard>
+      </div>
 
-    <div class="pagination">
-      <el-pagination layout="prev, pager, next"
-                     hide-on-single-page
-                     :current-page.sync="currentPage"
-                     :page-count="stories.totalPages"
-                     @current-change="onCurrentPageChange">
-      </el-pagination>
+      <div v-else class="empty">暂无数据</div>
+
+      <div class="pagination">
+        <el-pagination layout="prev, pager, next" hide-on-single-page
+                       :current-page.sync="currentPage"
+                       :page-count="stories.totalPages"
+                       @current-change="onCurrentPageChange">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +39,7 @@ export default {
   components: { StoryCard },
   data() {
     return {
+      isLogin: true,
       currentPage: 1,
       isLoading: true,
       error: '',
@@ -38,7 +49,7 @@ export default {
   methods: {
     ...mapActions(['getStories']),
     onCurrentPageChange() {
-      this.$router.push({ path: `/stories/page/${this.currentPage}` });
+      this.redirectTo(`/stories/page/${this.currentPage}`);
     },
     resetState() {
       this.isLoading = true;
@@ -51,6 +62,12 @@ export default {
         this.error = error;
       });
       this.isLoading = false;
+    },
+    handlePostStoryBtnClick() {
+      this.redirectTo('/stories/create');
+    },
+    redirectTo(path) {
+      this.$router.push({ path });
     },
   },
   created() {
@@ -67,19 +84,25 @@ export default {
   @import "../common/styles/colors";
   @import "../common/styles/dimens";
 
-  .story-list {
+  .column-flex {
     display: flex;
-    align-items: center;
     flex-direction: column;
+  }
+
+  .story-list {
     min-height: 100%;
     max-height: fit-content;
-    margin-top: $basic-margin;
-    justify-content: space-between;
-    width: 100%;
+    align-items: stretch;
+  }
+
+  .menu {
+    margin: $basic-margin 0;
+    text-align: right;
   }
 
   .content {
-    width: 100%;
+    justify-content: space-between;
+    flex-grow: 1;
   }
 
   .pagination {
@@ -89,6 +112,18 @@ export default {
   .empty {
     margin-top: $basic-margin * 2;
     color: $grey;
+  }
+
+  .post-story-btn {
+    display: inline-flex;
+    flex-direction: column;
+    width: 160px;
+    text-align: center;
+
+    .hint {
+      font-size: 14px;
+      color: $grey;
+    }
   }
 
 </style>

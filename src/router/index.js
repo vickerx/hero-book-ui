@@ -25,7 +25,7 @@ const routes = [
     component: SignUpActivation,
   },
   {
-    path: '/story/creat',
+    path: '/story/create',
     name: 'StoryCreation',
     component: StoryCreation,
   },
