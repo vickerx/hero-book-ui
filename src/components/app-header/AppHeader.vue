@@ -140,6 +140,6 @@ export default {
     color: #409EFF;
   }
   .el-icon-arrow-down {
-    font-size: 12px;
+    font-size: 14px;
   }
 </style>
