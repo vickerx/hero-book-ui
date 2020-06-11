@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'querystring';
 
 const GATEWAY = '/api';
 const CORE_URL = `${GATEWAY}/storyservice`;
@@ -11,7 +12,7 @@ export const registerUser = (userInfo) => axios.post(`${AUTH_URL}/user/registrat
 
 export const activeUser = (code) => axios.get(`${AUTH_URL}/user/activate`, { params: { code } });
 
-export const login = (email, password) => axios.post(`${GATEWAY}/login?email=${email}&password=${password}`);
+export const login = (email, password) => axios.post(`${GATEWAY}/login`, qs.stringify({ email, password }), { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
 
 export const logout = () => axios.post(`${GATEWAY}/logout`);
 
