@@ -1,24 +1,14 @@
 <template>
   <div class="story-list column-flex" v-loading="isLoading">
-    <el-alert v-if="error" :title="error" type="error" center show-icon>
-    </el-alert>
+    <el-alert v-if="error" :title="error" type="error" center show-icon></el-alert>
 
-    <div class="menu">
-      <div class="post-story-btn">
-        <el-button :type="isLogin ? 'primary' : 'info'" :disabled="!isLogin"
-                   @click="handlePostStoryBtnClick">
-          发布英雄故事</el-button>
-        <span v-if="!isLogin" class="hint">登录后可发布英雄事迹</span>
-      </div>
-    </div>
+    <story-list-menu></story-list-menu>
 
     <div class="content column-flex">
       <div  v-if="stories.content && stories.content.length > 0" class="stories">
         <StoryCard v-for="story in stories.content" :key="story.id" :story="story"></StoryCard>
       </div>
-
       <div v-else class="empty">暂无数据</div>
-
       <div class="pagination">
         <el-pagination layout="prev, pager, next" hide-on-single-page
                        :current-page.sync="currentPage"
@@ -27,16 +17,18 @@
         </el-pagination>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 import StoryCard from '../components/story-list/StoryCard';
+import StoryListMenu from '../components/story-list/StoryListMenu';
 
 export default {
   name: 'StoryList',
-  components: { StoryCard },
+  components: { StoryCard, StoryListMenu },
   data() {
     return {
       isLogin: true,
@@ -49,7 +41,7 @@ export default {
   methods: {
     ...mapActions(['getStories']),
     onCurrentPageChange() {
-      this.redirectTo(`/stories/page/${this.currentPage}`);
+      this.$router.push({ path: `/stories/page/${this.currentPage}` });
     },
     resetState() {
       this.isLoading = true;
@@ -62,12 +54,6 @@ export default {
         this.error = error;
       });
       this.isLoading = false;
-    },
-    handlePostStoryBtnClick() {
-      this.redirectTo('/stories/create');
-    },
-    redirectTo(path) {
-      this.$router.push({ path });
     },
   },
   created() {
@@ -95,11 +81,6 @@ export default {
     align-items: stretch;
   }
 
-  .menu {
-    margin: $basic-margin 0;
-    text-align: right;
-  }
-
   .content {
     justify-content: space-between;
     flex-grow: 1;
@@ -112,18 +93,6 @@ export default {
   .empty {
     margin-top: $basic-margin * 2;
     color: $grey;
-  }
-
-  .post-story-btn {
-    display: inline-flex;
-    flex-direction: column;
-    width: 160px;
-    text-align: center;
-
-    .hint {
-      font-size: 14px;
-      color: $grey;
-    }
   }
 
 </style>
