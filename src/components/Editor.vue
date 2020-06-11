@@ -1,16 +1,37 @@
 <template>
-  <div class="editor" ref="editor" style="text-align:left"></div>
+  <div>
+    <div id="toolbar" class="grey-border toolbar"></div>
+    <div class="placeholder left-align">请输入内容:</div>
+    <div id="editor" class="grey-border left-align"></div>
+  </div>
 </template>
 
 <script>
 import E from 'wangeditor';
 import { uploadImage } from '../common/network/api';
 
+const editorMenu = [
+  'head',
+  'bold',
+  'fontSize',
+  'fontName',
+  'italic',
+  'underline',
+  'strikeThrough',
+  'foreColor',
+  'backColor',
+  'link',
+  'list',
+  'justify',
+  'quote',
+  'emoticon',
+  'image',
+  'undo',
+  'redo',
+];
+
 export default {
   name: 'Editor',
-  data() {
-    return { editorContent: '' };
-  },
   methods: {
     showError(msg = '上传图片失败') {
       this.$message.error(msg);
@@ -26,9 +47,11 @@ export default {
     },
   },
   mounted() {
-    const editor = new E(this.$refs.editor);
+    const editor = new E('#toolbar', '#editor');
+    editor.customConfig.menus = editorMenu;
     editor.customConfig.onchange = (html) => {
-      this.editorContent = html;
+      const content = { html, text: editor.txt.text() };
+      this.$emit('onEditorContentChange', content);
     };
     editor.customConfig.uploadImgMaxLength = 1;
 
@@ -39,8 +62,32 @@ export default {
 };
 </script>
 
-<style scoped>
-  .editor {
-    height: inherit;
+<style scoped lang="scss">
+  @import "src/common/styles/colors";
+
+  .grey-border {
+    border: 1px solid $border-grey;
+  }
+
+  .left-align {
+    text-align: left;
+  }
+
+  .toolbar {
+    line-height: 20px;
+    background: #f1f1f1;
+  }
+
+  .placeholder {
+    color: $grey;
+  }
+
+  /deep/ .w-e-menu{
+    z-index: 2 !important;
+  }
+
+  /deep/ .w-e-text-container {
+    z-index: 1 !important;
+    height: 500px !important;
   }
 </style>
