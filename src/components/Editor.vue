@@ -49,6 +49,7 @@ export default {
   mounted() {
     const editor = new E('#toolbar', '#editor');
     editor.customConfig.menus = editorMenu;
+    editor.customConfig.zIndex = 10;
     editor.customConfig.onchange = (html) => {
       const content = { html, text: editor.txt.text() };
       this.$emit('onEditorContentChange', content);
@@ -82,12 +83,7 @@ export default {
     color: $grey;
   }
 
-  /deep/ .w-e-menu{
-    z-index: 2 !important;
-  }
-
   /deep/ .w-e-text-container {
-    z-index: 1 !important;
     height: 500px !important;
   }
 </style>
