@@ -13,11 +13,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { isEmpty } from 'lodash';
+
 export default {
   name: 'StoryListMenu',
   data() {
-    return { isLogin: true };
+    return { };
   },
+  computed: { ...mapState({ isLogin: ({ userInfo }) => !isEmpty(userInfo) }) },
   methods: {
     handlePostStoryBtnClick() {
       this.$router.push({ path: '/story/create' });

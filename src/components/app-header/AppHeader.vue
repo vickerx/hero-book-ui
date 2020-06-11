@@ -44,7 +44,7 @@ export default {
   methods: {
     ...mapActions(['updateUserInfo']),
     async refresh() {
-      const { data: userinfo } = await getUserInfo().catch(() => {});
+      const { data: userinfo } = await getUserInfo().catch(() => ({ data: null }));
       this.updateUserInfo(userinfo);
     },
     handleCommand(command) {
