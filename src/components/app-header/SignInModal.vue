@@ -71,6 +71,7 @@ export default {
       if (code === 0) {
         this.alert.type = 'success';
         this.shouldShowModal = false;
+        this.$emit('logged-in');
       } else {
         this.alert.type = 'error';
       }

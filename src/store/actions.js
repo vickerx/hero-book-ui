@@ -16,4 +16,7 @@ export default {
         throw ERROR_MASSAGE.SYSTEM_ERROR;
       });
   },
+  updateUserInfo({ commit }, userInfo) {
+    commit('updateUserInfo', userInfo);
+  },
 };
