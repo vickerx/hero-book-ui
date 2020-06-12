@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { trim, noop, isEmpty } from 'lodash';
+import { trim, isEmpty } from 'lodash';
 import { mapState } from 'vuex';
 import Editor from '../components/Editor';
 
@@ -46,29 +46,47 @@ export default {
   },
   computed: { ...mapState({ isLogin: ({ userInfo }) => !isEmpty(userInfo) }) },
   methods: {
+    isDirty() {
+      const { title, content } = this.storyForm;
+      return (title + content).trim() !== '';
+    },
     updateStoryContent({ html, text }) {
-      console.log(this.$refs.storyForm);
       this.storyForm.content = text.replace(/&nbsp;/g, '');
       this.storyContentHtml = html;
     },
     handlePostBtnClick() {
       this.$refs.storyForm.validate((validate) => {
         if (validate) {
-        //  todo: to post story
+          //  todo: to post story
         }
       });
     },
     handleCancelBtnClick() {
-      const { title, content } = this.storyForm;
-      const value = (title + content).trim();
-      if (value === '') {
-        this.$router.back();
-      } else {
-        this.$alert('离开当页会丢失未保存数据', '确认取消？', { showCancelButton: true })
-          .then(() => this.$router.back())
-          .catch(noop);
-      }
+      this.$router.back();
     },
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.isDirty()) {
+      this.$alert('离开当页会丢失未保存数据', '确认取消？', { showCancelButton: true, closeOnHashChange: false })
+        .then(() => next())
+        .catch(() => next(false));
+    } else {
+      next();
+    }
+  },
+  destroyed() {
+    window.onbeforeunload = null;
+  },
+  mounted() {
+    window.onbeforeunload = (e) => {
+      if (!this.isDirty()) {
+        return null;
+      }
+      if (e) {
+        e.returnValue = 'leave alert';
+      }
+      return 'leave alert';
+    };
   },
 };
 </script>
