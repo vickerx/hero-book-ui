@@ -37,6 +37,7 @@ export default {
       rules: {
         title: [
           { required: true, message: '请输入文章标题', trigger: 'blur', transform: trim },
+          { min: 1, max: 200, message: '标题长度为 1 到 200 字符' },
         ],
         content: [
           { required: true, message: '请输入内容', transform: trim },
@@ -51,7 +52,7 @@ export default {
       return (title + content).trim() !== '';
     },
     updateStoryContent({ html, text }) {
-      this.storyForm.content = text.replace(/&nbsp;/g, '');
+      this.storyForm.content = text.replace(/&nbsp;/g, ' ');
       this.storyContentHtml = html;
     },
     handlePostBtnClick() {
