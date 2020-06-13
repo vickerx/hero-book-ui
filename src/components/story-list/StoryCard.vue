@@ -7,7 +7,7 @@
       <span class="flex-item author">发布人：{{story.author}}</span>
       <span class="flex-item update-time">更新时间：{{format(story.updatedTime)}}</span>
     </div>
-    <p class="content">{{story.contentAbstract}}</p>
+    <p class="content">{{story.abstractContent}}</p>
   </el-card>
 </template>
 
@@ -23,7 +23,7 @@ export default {
         id: 1,
         title: '',
         author: '',
-        contentAbstract: '',
+        abstractContent: '',
         createdTime: '',
         updatedTime: '',
       }),

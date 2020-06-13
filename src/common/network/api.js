@@ -21,3 +21,5 @@ export const getUserInfo = () => axios.get(`${AUTH_URL}/user/info`);
 export const uploadImage = (image) => axios.put(`${CORE_URL}/hero-story/image`, image);
 
 export const postStory = (story) => axios.post(`${CORE_URL}//hero-story`, story);
+
+export const getStoryById = (id) => axios.get(`${CORE_URL}//hero-story/${id}`);
