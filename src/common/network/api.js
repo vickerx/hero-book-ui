@@ -18,4 +18,6 @@ export const logout = () => axios.post(`${GATEWAY}/logout`);
 
 export const getUserInfo = () => axios.get(`${AUTH_URL}/user/info`);
 
-export const uploadImage = (image) => axios.put('api/storyservice/hero-story/image', image);
+export const uploadImage = (image) => axios.put(`${CORE_URL}/hero-story/image`, image);
+
+export const postStory = (story) => axios.post(`${CORE_URL}//hero-story`, story);

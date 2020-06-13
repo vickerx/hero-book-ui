@@ -1,34 +1,49 @@
 <template>
-  <div v-if="isLogin" class="story-creation">
-    <el-form class="story-form" label-width="auto" :rules="rules"
-             :model="storyForm" ref="storyForm">
-      <el-form-item prop="title">
-        <el-input class="title" v-model="storyForm.title" placeholder="请输入文章标题"/>
-        <span class="required">*</span>
-      </el-form-item>
-      <el-form-item prop="content" class="story-content">
-        <editor v-model="storyForm.content" class="story-editor"
-                @onEditorContentChange="updateStoryContent"/>
-      </el-form-item>
-      <el-form-item class="btn-group">
-        <el-button type="primary" class="btn" @click="handlePostBtnClick">发布</el-button>
-        <el-button class="btn" @click="handleCancelBtnClick">取消</el-button>
-      </el-form-item>
-    </el-form>
+  <div>
+    <el-alert v-if="message" :title="message"
+              :type="isSuccess ? 'success' : 'error'"
+              center show-icon :closable="false"></el-alert>
+
+    <div v-if="isLogin" class="story-creation">
+      <el-form class="story-form" label-width="auto" :rules="rules"
+               :model="storyForm" ref="storyForm">
+        <el-form-item prop="title">
+          <el-input class="title" v-model="storyForm.title" placeholder="请输入文章标题"/>
+          <span class="required">*</span>
+        </el-form-item>
+        <el-form-item prop="content" class="story-content">
+          <editor v-model="storyForm.content" class="story-editor"
+                  @onEditorContentChange="updateStoryContent"/>
+        </el-form-item>
+        <el-form-item class="btn-group">
+          <el-button type="primary" class="btn" @click="handlePostBtnClick"
+                     :disabled="postBtnDisabled">发布</el-button>
+          <el-button class="btn" @click="handleCancelBtnClick">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
+    <div v-else class="login-hint">登录后可发布英雄事迹</div>
+
   </div>
-  <div v-else class="login-hint">登录后可发布英雄事迹</div>
 </template>
 
 <script>
 import { trim, isEmpty } from 'lodash';
 import { mapState } from 'vuex';
 import Editor from '../components/Editor';
+import { postStory } from '../common/network/api';
+
+const abstractContentMaxLength = 300;
 
 export default {
   name: 'StoryCreation',
   components: { Editor },
   data() {
     return {
+      isSuccess: false,
+      message: '',
+      postBtnDisabled: false,
       storyContentHtml: '',
       storyForm: {
         title: '',
@@ -56,11 +71,34 @@ export default {
       this.storyContentHtml = html;
     },
     handlePostBtnClick() {
+      this.message = '';
       this.$refs.storyForm.validate((validate) => {
         if (validate) {
-          //  todo: to post story
+          const { title, content } = this.storyForm;
+          const abstractContent = content.length > abstractContentMaxLength
+            ? `${content.slice(0, abstractContentMaxLength)}...`
+            : content;
+          this.toPostStory({ title, content: this.storyContentHtml, abstractContent });
         }
       });
+    },
+    toPostStory(story) {
+      this.postBtnDisabled = true;
+      postStory(story)
+        .then(() => this.handlePOstStorySuccess())
+        .catch(() => {
+          this.isSuccess = false;
+          this.message = '发布失败，请稍后重试';
+          this.postBtnDisabled = false;
+        });
+    },
+    handlePOstStorySuccess() {
+      this.isSuccess = true;
+      this.message = '发布成功';
+      setTimeout(() => {
+        this.$refs.storyForm.resetFields();
+        this.$router.back();
+      }, 500);
     },
     handleCancelBtnClick() {
       this.$router.back();
@@ -68,7 +106,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     if (this.isDirty()) {
-      this.$alert('离开当页会丢失未保存数据', '确认取消？', { showCancelButton: true, closeOnHashChange: false })
+      this.$alert('离开当页会丢失未保存数据', '确认离开？', { showCancelButton: true, closeOnHashChange: false })
         .then(() => next())
         .catch(() => next(false));
     } else {
@@ -125,5 +163,9 @@ export default {
     color: $grey;
     font-size: 18px;
     margin-top: $basic-margin;
+  }
+
+  .story-content {
+    margin-top: $basic-margin * 3;
   }
 </style>
