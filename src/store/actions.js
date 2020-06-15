@@ -3,7 +3,7 @@ import {
   UPDATE_STORIES,
   CLEAR_STORIES,
 } from './mutation-types';
-import { ERROR_MASSAGE } from '../common/network/errors';
+import { ERROR_MESSAGE } from '../common/network/errors';
 
 export default {
   getStories({ commit }, page = 1, size = 5) {
@@ -13,7 +13,7 @@ export default {
         commit(UPDATE_STORIES, { totalPages, totalElements, currentPage: number + 1, content });
       }).catch(() => {
         commit(CLEAR_STORIES);
-        throw ERROR_MASSAGE.SYSTEM_ERROR;
+        throw ERROR_MESSAGE.SYSTEM_ERROR;
       });
   },
   updateUserInfo({ commit }, userInfo) {

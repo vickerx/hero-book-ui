@@ -30,7 +30,10 @@
         </el-form-item>
         <el-form-item class="btn-group">
           <el-button type="primary" class="btn" @click="handleSubmit"
-                     :disabled="submitBtnDisabled">注册</el-button>
+                     :disabled="submitBtnDisabled" v-if="!shouldShowResendButton">注册</el-button>
+          <ResendEmailDialog v-if="shouldShowResendButton"
+                             :email="signUpForm.email"
+                             @closed="shouldShowModal = false"/>
           <el-button class="btn" @click="shouldShowModal = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -41,12 +44,14 @@
 <script>
 import * as _ from 'lodash';
 import { registerUser } from '../../common/network/api';
-import { ERROR_CODE, ERROR_MASSAGE } from '../../common/network/errors';
+import { ERROR_CODE, ERROR_MESSAGE } from '../../common/network/errors';
+import ResendEmailDialog from './ResendEmailDialog';
 
 const successMsg = '注册成功，请前往注册邮箱激活帐户';
 
 export default {
   name: 'SignUpModal',
+  components: { ResendEmailDialog },
   data() {
     const validatePassword = (rule, value, callback) => {
       const { checkPassword, password } = this.signUpForm;
@@ -63,9 +68,9 @@ export default {
       callback();
     };
 
-    const validateDuplicateEmail = (rule, value, callback) => {
-      if (value && this.isDuplicateEmail) {
-        callback(new Error(ERROR_CODE.DUPLICATE_EMAIL.massage));
+    const validateEmail = (rule, value, callback) => {
+      if (value && this.emailValidateError != null) {
+        callback(new Error(this.emailValidateError.message));
       }
       callback();
     };
@@ -77,6 +82,8 @@ export default {
       submitBtnDisabled: false,
       isSuccess: false,
       isDuplicateEmail: false,
+      emailValidateError: null,
+      shouldShowResendButton: false,
       message: '',
       signUpForm: {
         password: '',
@@ -92,7 +99,7 @@ export default {
         email: [
           { ...requiredNotEmptyRule, message: '请输入邮箱地址' },
           { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
-          { validator: validateDuplicateEmail },
+          { validator: validateEmail },
         ],
         password: [
           { required: true, message: '请输入密码' },
@@ -118,7 +125,8 @@ export default {
     resetState() {
       this.isSuccess = false;
       this.message = '';
-      this.isDuplicateEmail = false;
+      this.emailValidateError = null;
+      this.shouldShowResendButton = false;
     },
     replaceInvalidPwd() {
       this.signUpForm.password = this.signUpForm.password.replace(/[^(\x21-\x7f)]+/g, '');
@@ -143,9 +151,16 @@ export default {
     handleRegisterFailed(errorCode) {
       this.isSuccess = false;
       this.submitBtnDisabled = false;
-      this.isDuplicateEmail = errorCode === ERROR_CODE.DUPLICATE_EMAIL.code;
-      this.message = this.isDuplicateEmail ? '' : ERROR_MASSAGE.SYSTEM_ERROR;
-      this.$refs.signUpForm.validateField('email');
+      if (errorCode === ERROR_CODE.DUPLICATE_EMAIL.code) {
+        this.emailValidateError = ERROR_CODE.DUPLICATE_EMAIL;
+        this.$refs.signUpForm.validateField('email');
+      } else if (errorCode === ERROR_CODE.NOT_ACTIVATED_ACCOUNT.code) {
+        this.emailValidateError = ERROR_CODE.NOT_ACTIVATED_ACCOUNT;
+        this.$refs.signUpForm.validateField('email');
+        this.shouldShowResendButton = true;
+      } else {
+        this.message = ERROR_MESSAGE.SYSTEM_ERROR;
+      }
     },
   },
 };

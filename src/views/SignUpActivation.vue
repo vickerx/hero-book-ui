@@ -13,7 +13,7 @@
 <script>
 import * as _ from 'lodash';
 import { activeUser } from '../common/network/api';
-import { ERROR_CODE, ERROR_MASSAGE } from '../common/network/errors';
+import { ERROR_CODE, ERROR_MESSAGE } from '../common/network/errors';
 
 export default {
   name: 'SignUpActivation',
@@ -37,7 +37,7 @@ export default {
         .catch(({ response }) => {
           const errorCode = _.get(response, 'data.error_code');
           this.error = _.find(_.values(ERROR_CODE), (value) => value.code === errorCode).message
-            || ERROR_MASSAGE.SYSTEM_ERROR;
+            || ERROR_MESSAGE.SYSTEM_ERROR;
           this.isSuccess = false;
         });
     },
